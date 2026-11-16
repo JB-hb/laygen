@@ -1,0 +1,17 @@
+{
+
+	"Name": "Test1",
+	"NumWindows": 2,
+
+	"window1":{
+		"name":"dev",
+		"split":true,
+		"orientatio":"v",
+		"subPanes":0
+	},
+
+	"window2":{
+		"name":"server",
+		"split":false
+	}
+}
