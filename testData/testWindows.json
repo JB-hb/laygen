@@ -6,7 +6,7 @@
 	"window1":{
 		"name":"dev",
 		"split":true,
-		"orientatio":"v",
+		"orientation":"v",
 		"subPanes":0
 	},
 

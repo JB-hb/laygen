@@ -7,6 +7,7 @@ int main(){
 	const cJSON *sesion_name = NULL;
 	const cJSON *num_windows = NULL;
 	const cJSON *window = NULL;
+	const cJSON *name = NULL;
 	const cJSON *split = NULL;
 	const cJSON *orientation = NULL;
 	const cJSON *sub_panes = NULL;
@@ -53,6 +54,57 @@ int main(){
 		return 1;
 	}	
 	printf("Number of Windows: %d\n", num_windows->valueint);
+
+	//Get Data For Windows
+	
+	char win[8];
+	for (int i = 0; i < num_windows->valueint; i++){
+		int length = sprintf(win, "window%d", i+1);
+		if(length < 0){
+			printf("Error writing window %d in string", i+1);
+			return 1;
+		}
+
+		//Get Window Name
+
+		window = cJSON_GetObjectItemCaseSensitive(layout, win);
+		name = cJSON_GetObjectItemCaseSensitive(window, "name");
+		if(!cJSON_IsString(name) || name->valuestring == NULL){
+			printf("Error in name in window %d", i+1);
+			return 1;
+		}
+		printf("Window %d name %s :\n\t",i+1, name->valuestring);
+
+		//Get Split Value
+
+		split = cJSON_GetObjectItemCaseSensitive(window, "split");			
+		if(!cJSON_IsBool(split)){
+			printf("Error in split of window %d", i+1);
+			return 1;
+		}
+		if(cJSON_IsTrue(split)){
+			printf("split -> true\n\t");
+
+			//Get Orientation Value
+			orientation = cJSON_GetObjectItemCaseSensitive(window, "orientation"); 
+			if(!cJSON_IsString(orientation) || orientation->valuestring == NULL){
+				printf("Error in orientation of split window %d", i+1);
+				return 1;
+			}
+			printf("orientation -> %s\n\t", orientation->valuestring);
+
+			//Get Pane Mode
+			sub_panes = cJSON_GetObjectItemCaseSensitive(window, "subPanes");
+			if(!cJSON_IsNumber(sub_panes) || (sub_panes->valueint < 0 || sub_panes->valueint > 3)){
+				printf("Error in subPanes value of window %d", i+1);
+				return 1;
+			}
+			printf("subPanes -> %d\n", sub_panes->valueint);
+		}else{
+			printf("split -> false\n");
+		}
+
+	}
 
 	return 0;
 }
